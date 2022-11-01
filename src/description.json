@@ -1,0 +1,27 @@
+[
+    {
+        "id": 0,
+        "title": "Accountancy Business and Management",
+        "description": "The Accountancy, Business and Management (ABM) strand would focus on the basic concepts of financial management, business management, corporate operations, and all things that are accounted for."
+    },
+    {
+        "id": 1,
+        "title": "Science, Technology, Engineering, and Mathematics",
+        "description": "STEM stands for Science, Technology, Engineering, and Mathematics strand. Through the STEM strand, senior high school students are exposed to complex mathematical and science theories and concepts which will serve as a foundation for their college courses."
+    },
+    {
+        "id": 2,
+        "title": "Humanities and Social Sciences",
+        "description": "The Humanities and Social Sciences (HUMSS) strands equip students with a wide range of discipline with the use of their experiences and skills into the investigation and inquiry of human situations by studying its behavior and social changes using empirical, analytical, and critical method techniques."
+    },
+    {
+        "id": 3,
+        "title": "Technical-Vocational Livelihood",
+        "description": "TVL stands for Technical-Vocational Livelihood track. Through the TVL senior high school track, students can gain the skills and knowledge they need to seek for employment straight after senior high school whether that's in the Philippines or overseas."
+    },
+    {
+        "id": 4,
+        "title": "General Academic Strand",
+        "description": "General Academic Strand caters students who are not yet sure of what course or degree they want to take in college. This strand was designed so that indecisive learners can proceed with any college program."
+    }
+]
