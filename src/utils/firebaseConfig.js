@@ -1,11 +1,10 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyDnbuWYuF-C6DK3eqkRbFtEanZJm7CqSYg",
-  authDomain: "decision-support-system-f77ca.firebaseapp.com",
-  projectId: "decision-support-system-f77ca",
-  storageBucket: "decision-support-system-f77ca.appspot.com",
-  messagingSenderId: "157761156187",
-  appId: "1:157761156187:web:6271554d99a2c0dd883b7e",
-  measurementId: "G-Q57MT8YCEY"
+  apiKey: "AIzaSyDBuiY7injma49G6T7cW0Ft25CAEpCh4Dg",
+  authDomain: "dssystem-fb08e.firebaseapp.com",
+  projectId: "dssystem-fb08e",
+  storageBucket: "dssystem-fb08e.appspot.com",
+  messagingSenderId: "305958858529",
+  appId: "1:305958858529:web:67c84cef3ea9ef119b5860"
 };
 
 export default firebaseConfig;
