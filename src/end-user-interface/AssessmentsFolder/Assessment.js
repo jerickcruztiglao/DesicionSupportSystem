@@ -23,6 +23,7 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import TablePagination from "@mui/material/TablePagination";
+import Timer from "./Timer";
 const style = {
   section1: {
     display: "flex",
@@ -224,11 +225,10 @@ function Assessment() {
   const [allAns, setAllAns] = useState([]);
   const [studID, setStudID] = useState("");
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   qSets.sort((a, b) => (a.id < b.id ? -1 : 1));
   const emptyRows =
     page >= 0 ? Math.max(0, (1 + page) * rowsPerPage - qSets.length) : 0;
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -252,7 +252,7 @@ function Assessment() {
     ) {
       alert("Somefields are empty!");
       setLoading(false);
-    } else if (userInfo.average < 65) {
+    } else if (userInfo.average < 75) {
       alert("Sorry but you cannot take the assesment. Your Average grade seem too low.");
       setLoading(false);
     }
@@ -277,7 +277,7 @@ function Assessment() {
   };
 
   useEffect(() => {
-    if (userInfo.average > 70 && userInfo.average < 85) {
+    if (userInfo.average > 75 && userInfo.average < 85) {
       const q = query(collection(db, "Questions"), where('strand', '!=', "STEM"));
       onSnapshot(q, (querySnapshot) => {
         const data = [];
@@ -334,8 +334,6 @@ function Assessment() {
       }
     })
   }, [idSets, navigate, studID])
-
-
   return (
     <Box component={Grid} container justifyContent='center' sx={style.root}>
       <Helmet>
@@ -488,9 +486,14 @@ function Assessment() {
         </Box>
         <Box component={Grid} container sx={style.container}>
           <Typography sx={{ fontSize: 32 }}>Please <b style={{ color: 'red', fontWeight: 700 }}>DO NOT</b> reload the page while you are taking the assessment.</Typography>
+          <Typography sx={{ fontSize: 32 }}>And if the <b style={{ color: 'red', fontWeight: 700 }}>TIME LIMIT</b> ends your answers will be submited directly.</Typography>
+          {userInfo.average > 75 && userInfo.average < 85 ? <Typography sx={{ fontSize: 32 }}>NOTE: You cannot take questions containing STEM strand</Typography> : ""}
         </Box>
         {show ? (
           <Box sx={style.questionareStyle}>
+            <Box component={Grid} container sx={style.container}>
+              {<Timer userId={userInfo.currentID} />}
+            </Box>
             {
               (rowsPerPage > 0
                 ? qSets.slice(
@@ -510,18 +513,7 @@ function Assessment() {
             }
             {
               emptyRows > 0 && (
-                <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'center', mt: 2 }}>
-                  <Button
-                    disabled={allAns.length === 0 ? true : false}
-                    onClick={() => {
-                      localStorage.setItem("userId", userInfo.currentID);
-                      navigate(`/assessment/result/${userInfo.currentID}`);
-                    }}
-                    sx={style.button}
-                  >
-                    "Submit"
-                  </Button>
-                </Box>
+                <Box />
               )
             }
             <Grid
@@ -531,7 +523,7 @@ function Assessment() {
               sx={style.footer}
             >
               <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                rowsPerPageOptions={[10, 15, 20, { label: "All", value: -1 }]}
                 colSpan={6}
                 count={qSets.length}
                 rowsPerPage={rowsPerPage}
@@ -547,6 +539,20 @@ function Assessment() {
                 ActionsComponent={TablePaginationActions}
               />
             </Grid>
+            {allAns.length === qSets.length ?
+              <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'center', mt: 2 }}>
+                <Button
+                  disabled={allAns.length === 0 ? true : false}
+                  onClick={() => {
+                    localStorage.setItem("userId", userInfo.currentID);
+                    navigate(`/assessment/result/${userInfo.currentID}`);
+                  }}
+                  sx={style.button}
+                >
+                  "Submit"
+                </Button>
+              </Box> : ""
+            }
           </Box>
         ) : (
           <Box sx={{ height: "50vh" }} />

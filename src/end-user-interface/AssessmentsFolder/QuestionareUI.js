@@ -5,6 +5,7 @@ import {
   Radio,
   RadioGroup,
   FormControlLabel,
+  Divider,
 } from "@mui/material";
 import { db } from "../../utils/firebase";
 import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
@@ -70,6 +71,8 @@ function QuestionareUI({ id, data, userId }) {
   }, [payload.selectedRadio, id, userId])
   return (
     <Card sx={style.cardContainer}>
+      <Typography sx={{ fontSize: 24, fontWeight: "bold", letterSpacing: 1 }}>{data.strand}</Typography>
+      <Divider sx={{margin: "10px 0px", backgroundColor: "#555"}}/>
       <Typography variant='h5'>{data.question}</Typography>
       <RadioGroup
         aria-labelledby='demo-controlled-radio-buttons-group'
