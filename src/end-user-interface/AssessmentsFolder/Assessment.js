@@ -487,7 +487,8 @@ function Assessment() {
         <Box component={Grid} container sx={style.container}>
           <Typography sx={{ fontSize: 32 }}>Please <b style={{ color: 'red', fontWeight: 700 }}>DO NOT</b> reload the page while you are taking the assessment.</Typography>
           <Typography sx={{ fontSize: 32 }}>And if the <b style={{ color: 'red', fontWeight: 700 }}>TIME LIMIT</b> ends your answers will be submited directly.</Typography>
-          {userInfo.average > 75 && userInfo.average < 85 ? <Typography sx={{ fontSize: 32 }}>NOTE: You cannot take questions containing STEM strand</Typography> : ""}
+          {userInfo.average > 75 && userInfo.average < 85 ? 
+          <Typography sx={{ fontSize: 32, textAlign: 'center' }}>NOTE: You cannot answer in the STEM strand; instead you can only answer in ABM, TVL, GAS, and HUMMS.</Typography> : ""}
         </Box>
         {show ? (
           <Box sx={style.questionareStyle}>
