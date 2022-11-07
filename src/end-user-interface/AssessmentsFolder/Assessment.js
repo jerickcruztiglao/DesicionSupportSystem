@@ -9,6 +9,11 @@ import {
   Grid,
   useMediaQuery,
   Button,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
@@ -226,6 +231,7 @@ function Assessment() {
   const [studID, setStudID] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [over, setOver] = useState(0);
   qSets.sort((a, b) => (a.id < b.id ? -1 : 1));
   const emptyRows =
     page >= 0 ? Math.max(0, (1 + page) * rowsPerPage - qSets.length) : 0;
@@ -239,7 +245,14 @@ function Assessment() {
   };
 
   const handleChange = (prop) => (event) => {
-    setUserInfo({ ...userInfo, [prop]: event.target.value });
+    if (prop === "name") {
+      const result = event.target.value.replace(/[^a-z, " "]/gi, '');
+      setUserInfo({ ...userInfo, name: result });
+    } else {
+      setUserInfo({ ...userInfo, [prop]: event.target.value });
+    }
+
+
   };
 
   const handleSubmitInfo = async () => {
@@ -253,14 +266,12 @@ function Assessment() {
       alert("Somefields are empty!");
       setLoading(false);
     } else if (userInfo.average < 75) {
-      alert("Sorry but you cannot take the assesment. Your Average grade seem too low.");
       setLoading(false);
     }
     else if (userInfo.average > 100) {
       alert("Average grade input is above the limit.");
       setLoading(false);
     }
-
     else {
       await addDoc(collection(db, "Students"), {
         name: userInfo.name,
@@ -277,7 +288,7 @@ function Assessment() {
   };
 
   useEffect(() => {
-    if (userInfo.average > 75 && userInfo.average < 85) {
+    if (userInfo.average >= 75 && userInfo.average < 85) {
       const q = query(collection(db, "Questions"), where('strand', '!=', "STEM"));
       onSnapshot(q, (querySnapshot) => {
         const data = [];
@@ -293,7 +304,7 @@ function Assessment() {
         });
         setIdSets(id);
         setQSets(data);
-
+        setOver(querySnapshot.size)
       })
     }
     else {
@@ -312,6 +323,7 @@ function Assessment() {
         });
         setIdSets(id);
         setQSets(data);
+        setOver(querySnapshot.size)
       })
     }
   }, [navigate, userInfo.average]);
@@ -377,25 +389,29 @@ function Assessment() {
               />
             </Box>
             <Box>
-              <TextField
-                id='outlined-basic'
-                placeholder='Sex'
-                variant='outlined'
-                autoComplete='off'
-                value={userInfo.sex}
-                disabled={show ? true : false}
-                onChange={handleChange("sex")}
-                sx={style.textFieldStyle}
-                inputProps={{
-                  sx: {
-                    color: 'black',
-                    fontWeight: 'bold',
-                    backgroundColor: "white",
-                    borderRadius: 1,
-                  }
-                }}
-                onKeyDown={(e) => e.key === 'Enter' && handleSubmitInfo()}
-              />
+              <FormControl sx={{
+                color: 'black',
+                fontWeight: 'bold',
+                backgroundColor: "white",
+                borderRadius: 1,
+                justifyContent: matchMD ? "space-between" : "center",
+                width: {
+                  xs: 240,
+                  sm: 250,
+                  md: 350,
+                },
+                margin: 1,
+              }}>
+                <RadioGroup
+                  name="radio-buttons-group"
+                  onChange={handleChange("sex")}
+                  row={matchMD ? true : false}
+                >
+                  <Typography sx={{ padding: 2, fontWeight: 500, letterSpacing: 1 }}>Sex :</Typography>
+                  <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                  <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                </RadioGroup>
+              </FormControl>
             </Box>
           </Grid>
           <Grid
@@ -487,79 +503,84 @@ function Assessment() {
         <Box component={Grid} container sx={style.container}>
           <Typography sx={{ fontSize: 32 }}>Please <b style={{ color: 'red', fontWeight: 700 }}>DO NOT</b> reload the page while you are taking the assessment.</Typography>
           <Typography sx={{ fontSize: 32 }}>And if the <b style={{ color: 'red', fontWeight: 700 }}>TIME LIMIT</b> ends your answers will be submited directly.</Typography>
-          {userInfo.average > 75 && userInfo.average < 85 ? 
-          <Typography sx={{ fontSize: 32, textAlign: 'center' }}>NOTE: You cannot answer in the STEM strand; instead you can only answer in ABM, TVL, GAS, and HUMMS.</Typography> : ""}
+          {userInfo.average >= 75 && userInfo.average < 85 ?
+            <Typography sx={{ fontSize: 32, textAlign: 'center' }}>NOTE: You cannot answer in the STEM strand; instead you can only answer in ABM, TVL, GAS, and HUMMS.</Typography> : ""}
+          {userInfo.average > 0 && userInfo.average < 75 ?
+            <Typography sx={{ fontSize: 32, textAlign: 'center' }}>NOTE: Sorry but you cannot take the assesment. Your Average grade seem too low.</Typography> : ""}
         </Box>
-        {show ? (
-          <Box sx={style.questionareStyle}>
-            <Box component={Grid} container sx={style.container}>
-              {<Timer userId={userInfo.currentID} />}
-            </Box>
-            {
-              (rowsPerPage > 0
-                ? qSets.slice(
-                  page * rowsPerPage,
-                  page * rowsPerPage + rowsPerPage
+        {
+          show ? (
+            <Box sx={style.questionareStyle}>
+              <Box component={Grid} container sx={style.container}>
+                {<Timer userId={userInfo.currentID} />}
+              </Box>
+              {
+                (rowsPerPage > 0
+                  ? qSets.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                  : qSets
+                ).map((row) => (
+                  <Box key={row.id}>
+                    {show ? (
+                      <QuestionareUI data={row.data} id={row.id} userId={userInfo.currentID} />
+                    ) : (
+                      <Box sx={{ width: "100%", minHeight: "50vh" }} />
+                    )}
+                  </Box>
+                ))
+              }
+              {
+                emptyRows > 0 && (
+                  <Box />
                 )
-                : qSets
-              ).map((row) => (
-                <Box key={row.id}>
-                  {show ? (
-                    <QuestionareUI data={row.data} id={row.id} userId={userInfo.currentID} />
-                  ) : (
-                    <Box sx={{ width: "100%", minHeight: "50vh" }} />
-                  )}
-                </Box>
-              ))
-            }
-            {
-              emptyRows > 0 && (
-                <Box />
-              )
-            }
-            <Grid
-              container
-              justifyContent='center'
-              alignItems='center'
-              sx={style.footer}
-            >
-              <TablePagination
-                rowsPerPageOptions={[10, 15, 20, { label: "All", value: -1 }]}
-                colSpan={6}
-                count={qSets.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: {
-                    "aria-label": "rows per page",
-                  },
-                  native: true,
-                }}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </Grid>
-            {allAns.length === qSets.length ?
-              <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'center', mt: 2 }}>
-                <Button
-                  disabled={allAns.length === 0 ? true : false}
-                  onClick={() => {
-                    localStorage.setItem("userId", userInfo.currentID);
-                    navigate(`/assessment/result/${userInfo.currentID}`);
+              }
+              <Grid
+                container
+                justifyContent='center'
+                alignItems='center'
+                sx={style.footer}
+              >
+                <TablePagination
+                  rowsPerPageOptions={[10, 15, 20, { label: "All", value: -1 }]}
+                  colSpan={6}
+                  count={qSets.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: {
+                      "aria-label": "rows per page",
+                    },
+                    native: true,
                   }}
-                  sx={style.button}
-                >
-                  "Submit"
-                </Button>
-              </Box> : ""
-            }
-          </Box>
-        ) : (
-          <Box sx={{ height: "50vh" }} />
-        )}
-      </Box>
-    </Box>
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActions}
+                />
+              </Grid>
+              {allAns.length === qSets.length ?
+                <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'center', mt: 2 }}>
+                  <Button
+                    disabled={allAns.length === 0 ? true : false}
+                    onClick={() => {
+                      localStorage.setItem("userId", userInfo.currentID);
+                      localStorage.setItem("over", over);
+                      navigate(`/assessment/result/${userInfo.currentID}`);
+                    }}
+                    sx={style.button}
+                  >
+                    "Submit"
+                  </Button>
+                </Box> : ""
+              }
+            </Box>
+          ) : (
+            <Box sx={{ height: "50vh" }} />
+          )
+        }
+      </Box >
+    </Box >
   );
 }
 

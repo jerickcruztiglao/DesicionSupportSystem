@@ -83,17 +83,6 @@ function AverageResult() {
     return unsubscribe;
   }, [count]);
 
-
-  useEffect(() => {
-    let indexes = []
-    for (var i = 0; i < 5; i++) {
-      if (myChart.refData[i] === max) {
-        indexes.push(i)
-      }
-    }
-    localStorage.setItem("MostSelected", myChart.labels[indexes.at(0)])
-  }, [myChart.refData, myChart.labels, max])
-
   return (
     <Box sx={{
       backgroundColor: 'white', paddingBottom: 8, paddingTop: 2, width: {

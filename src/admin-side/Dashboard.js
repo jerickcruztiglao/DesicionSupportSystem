@@ -96,6 +96,45 @@ export default function Dashboard() {
   const [studentCount, setStudentCount] = useState(0);
   const [quesCount, setQuesCount] = useState(0);
   const [MostSelected, setMostSelected] = useState("");
+  const [loading, setLoading] = useState(false)
+  const [count, setCount] = useState({
+    ABM: 0,
+    STEM: 0,
+    HUMMS: 0,
+    TVL: 0,
+    GAS: 0,
+  });
+  const myChart = {
+    labels: ["ABM", "STEM", "HUMMS", "TVL", "GAS"],
+    refData: [count.ABM, count.STEM, count.HUMMS, count.TVL, count.GAS],
+    datasets: [
+      {
+        data: [count.ABM, count.STEM, count.HUMMS, count.TVL, count.GAS],
+      },
+    ],
+  };
+  const max = Math.max(...myChart.datasets[0].data);
+  useEffect(() => {
+    setLoading(true)
+    const collRef = collection(db, "Students");
+    const unsubscribe = onSnapshot(collRef, (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        if (doc.data().strand === "ABM") {
+          count.ABM += 1;
+        } else if (doc.data().strand === "STEM") {
+          count.STEM += 1;
+        } else if (doc.data().strand === "HUMMS") {
+          count.HUMMS += 1;
+        } else if (doc.data().strand === "TVL") {
+          count.TVL += 1;
+        } else if (doc.data().strand === "GAS") {
+          count.GAS += 1;
+        }
+      });
+      setLoading(false);
+    });
+    return unsubscribe;
+  }, [count]);
 
   useEffect(() => {
     const sQuery = query(collection(db, "Students"));
@@ -106,9 +145,17 @@ export default function Dashboard() {
     onSnapshot(qQuery, (querySnapshot) => {
       setQuesCount(querySnapshot.docs.length)
     });
-    const val = localStorage.getItem("MostSelected");
-    setMostSelected(val);
   }, []);
+
+  useEffect(() => {
+    let indexes = []
+    for (var i = 0; i < 5; i++) {
+      if (myChart.refData[i] === max) {
+        indexes.push(i)
+      }
+    }
+    setMostSelected(myChart.labels[indexes.at(0)])
+  }, [myChart.refData, myChart.labels, max])
 
   return (
     <Box component={Grid} sx={style.root}>

@@ -11,11 +11,6 @@ import { db } from "../../utils/firebase";
 import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
 
 const style = {
-  cardContainer: {
-    margin: "15px 0px 0px 0px",
-    padding: "20px 20px 0px 30px",
-    backgroundColor: (theme) => `${theme.palette.secondary.main}`,
-  },
   clearSelection: {
     fontStyle: "italic",
     textDecoration: "underline",
@@ -70,9 +65,13 @@ function QuestionareUI({ id, data, userId }) {
     unsubscribe()
   }, [payload.selectedRadio, id, userId])
   return (
-    <Card sx={style.cardContainer}>
+    <Card sx={{
+      margin: "15px 0px 0px 0px",
+      padding: "20px 20px 0px 30px",
+      backgroundColor: (theme) => hasAns === true ? '#77DD77' : `${theme.palette.secondary.main}`,
+    }}>
       <Typography sx={{ fontSize: 24, fontWeight: "bold", letterSpacing: 1 }}>{data.strand}</Typography>
-      <Divider sx={{margin: "10px 0px", backgroundColor: "#555"}}/>
+      <Divider sx={{ margin: "10px 0px", backgroundColor: "#555" }} />
       <Typography variant='h5'>{data.question}</Typography>
       <RadioGroup
         aria-labelledby='demo-controlled-radio-buttons-group'

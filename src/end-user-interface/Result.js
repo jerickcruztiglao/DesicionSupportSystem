@@ -86,6 +86,7 @@ const style = {
 function Result() {
   const [loading, setLoading] = useState(false)
   let userId = localStorage.getItem("userId");
+  let over = localStorage.getItem("over");
   const [score, setScore] = React.useState({
     ABM: 0,
     STEM: 0,
@@ -125,6 +126,7 @@ function Result() {
   const navigate = useNavigate();
   const [arrStrand1, setArrStrand1] = useState("");
   const [arrStrand2, setArrStrand2] = useState("");
+  const [total, setTotal] = useState(0);
   const max = Math.max(...myChart.datasets[0].data)
   useEffect(() => {
     setLoading(true)
@@ -145,6 +147,8 @@ function Result() {
         }
       })
       setLoading(false);
+      let newTotal = score.ABM + score.STEM + score.HUMMS + score.TVL + score.GAS
+      setTotal(newTotal)
     })
     return unsubscribe;
   }, [score, userId]);
@@ -152,17 +156,17 @@ function Result() {
   const [text, setText] = useState("Try Again")
   useEffect(() => {
     if (score.ABM === 0 && score.STEM === 0 && score.HUMMS === 0 && score.TVL === 0 && score.GAS === 0) {
-        (async () => {
-          setText("Try Again")
-          await setDoc(
-            doc(db, "Students", userId),
-            {
-              strand: "Failed",
-              strand2: "Failed",
-            },
-            { merge: true }
-          );
-        })()
+      (async () => {
+        setText("Try Again")
+        await setDoc(
+          doc(db, "Students", userId),
+          {
+            strand: "Failed",
+            strand2: "Failed",
+          },
+          { merge: true }
+        );
+      })()
       setArrStrand1("")
       setArrStrand2("")
     } else {
@@ -208,6 +212,9 @@ function Result() {
             :
             <Box sx={style.section2}>
               <Box>
+                <Typography p={1} variant={"h4"} textAlign='left'>
+                  {total} / {over}
+                </Typography>
                 {arrStrand1 === "" ? <Typography p={1} variant={"h4"} textAlign='left'>Seems like you failed the assesment.Please try again!</Typography> :
                   <>
                     <Typography p={1} variant={"h4"} textAlign='left'>
