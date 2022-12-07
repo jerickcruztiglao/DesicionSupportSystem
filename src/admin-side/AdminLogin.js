@@ -30,8 +30,7 @@ const style = {
     width: 1500,
   },
   root: {
-    background: (theme) =>
-      `radial-gradient(circle, ${theme.palette.primary.light}, ${theme.palette.primary.dark})`,
+    background: `linear-gradient(to bottom right,#0052A2, #00498D)`,
     height: {
       xs: "110vh",
       sm: "100vh",
@@ -185,7 +184,7 @@ function AdminLogin({ loggedIn }) {
       <Box sx={style.section1}>
         <Box component={Grid} container justifyContent='flex-start'>
           <Box component={Grid} container sx={style.headerContainer}>
-            <IconButton sx={{}} onClick={() => navigate("/academic-strands")}>
+            <IconButton sx={{}} onClick={() => navigate('/home')}>
               <ArrowBackIcon sx={style.arrowIconStyle} />
             </IconButton>
           </Box>

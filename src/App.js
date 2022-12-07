@@ -3,8 +3,6 @@ import { theme } from "./utils/theme";
 import { ThemeProvider } from "@mui/material/styles";
 import { Navigate, Route, Routes } from "react-router-dom";
 //Pages
-import Landpage from "./end-user-interface/Landpage";
-import AcademicTracks from "./end-user-interface/AcademicTracks";
 import AdminLogin from "./admin-side/AdminLogin";
 import ProtectedRoutes from "././routes/ProtectedRoutes";
 import PublicRoutes from "././routes/PublicRoutes";
@@ -16,6 +14,12 @@ import { Backdrop, Box, CircularProgress } from "@mui/material";
 import StudentRecords from "./admin-side/adminFunc/StudentRecords";
 import ViewQuestion from "./admin-side/adminFunc/ViewQuestion";
 import { grey } from "@mui/material/colors";
+import Home from "./new-end-user-interface/Home/Home";
+import Stem from "./new-end-user-interface/Stem/Stem";
+import Abm from "./new-end-user-interface/Abm/Abm";
+import Humss from "./new-end-user-interface/Humms/Humms";
+import Gas from "./new-end-user-interface/Gas/Gas";
+import Tvl from "./new-end-user-interface/Tvl/Tvl";
 
 const style = {
   backdrop: {
@@ -63,8 +67,12 @@ function App() {
       <ThemeProvider theme={theme}>
         <Routes>
           <Route path='/' element={<Navigate to='/home' />} />
-          <Route path='home' element={<Landpage />} />
-          <Route path='academic-strands' element={<AcademicTracks />} />
+          <Route path='home' element={<Home/>} />
+          <Route path='stem' element={<Stem/>} />
+          <Route path='abm' element={<Abm/>} />
+          <Route path='humss' element={<Humss/>} />
+          <Route path='gas' element={<Gas/>} />
+          <Route path='tvl' element={<Tvl/>} />
           <Route path='assessment' element={<Assessment />} />
           <Route path='assessment/result/:id' element={<Result />} />
           <Route element={<PublicRoutes isAuth={isAuthenticated} />}>

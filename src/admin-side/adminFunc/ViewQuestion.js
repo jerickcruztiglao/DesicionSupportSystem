@@ -27,8 +27,7 @@ import {
 } from "firebase/firestore";
 const style = {
   root: {
-    background: (theme) =>
-      `radial-gradient(circle, ${theme.palette.primary.light}, ${theme.palette.primary.dark})`,
+    background: `linear-gradient(to bottom right,#0052A2, #00498D)`,
     minHeight: "100vh",
     width: "100%",
     paddingTop: {

@@ -23,8 +23,7 @@ const auth = getAuth();
 
 const style = {
   root: {
-    background: (theme) =>
-      `radial-gradient(circle, ${theme.palette.primary.light}, ${theme.palette.primary.dark})`,
+    background: `linear-gradient(to bottom right,#0052A2, #00498D)`,
     width: "100%",
     height: {
       xs: '100%',
@@ -167,7 +166,7 @@ export default function Dashboard() {
         <Box component={Grid} container alignItems="center" justifyContent='center' >
           <Box component={Grid} container justifyContent='center' sx={{ marginTop: 5, alignItems: 'center' }}>
             <AccountCircle />
-            <Typography sx={{ paddingLeft: .5, fontWeight: "bolder", }}>
+            <Typography sx={{ paddingLeft: .5, fontWeight: "bolder", fontSize: 18 }}>
               Logged in as admin. Click here to &nbsp;
             </Typography>
             <Typography

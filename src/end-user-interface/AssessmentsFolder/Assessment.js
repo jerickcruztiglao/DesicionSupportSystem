@@ -37,8 +37,7 @@ const style = {
     width: 1500,
   },
   root: {
-    background: (theme) =>
-      `radial-gradient(circle, ${theme.palette.primary.light}, ${theme.palette.primary.dark})`,
+    background: `linear-gradient(to bottom right,#0052A2, #00498D)`,
     height: "100%",
     width: "100%",
     paddingBottom: {
@@ -87,7 +86,8 @@ const style = {
       md: 45,
     },
     letterSpacing: 1,
-    fontWeight: 'bolder'
+    fontWeight: 'bolder',
+    color: '#fff'
   },
   questionareStyle: {
     borderRadius: 1,
@@ -130,6 +130,7 @@ const style = {
     paddingRight: 5,
     paddingLeft: 5,
     fontWeight: 'bold',
+    
   },
   progressbar: {
     width: "100%",
@@ -355,7 +356,7 @@ function Assessment() {
       <Box sx={style.section1}>
         <Box component={Grid} container justifyContent='flex-start'>
           <Box component={Grid} container sx={style.headerContainer}>
-            <IconButton onClick={() => navigate("/academic-strands")}>
+            <IconButton onClick={() => navigate(-1)}>
               <ArrowBackIcon sx={style.arrowIconStyle} />
             </IconButton>
           </Box>

@@ -29,8 +29,7 @@ ChartJS.register(
 
 const style = {
   root: {
-    background: (theme) =>
-      `radial-gradient(circle, ${theme.palette.primary.light}, ${theme.palette.primary.dark})`,
+    background: `linear-gradient(to bottom right,#0052A2, #00498D)`,
     width: "100%",
     height: {
       xs: '100%',
@@ -199,7 +198,7 @@ function Result() {
         <link rel="Decision Support Icon" href={logo} />
       </Helmet>
       <Box sx={style.section1}>
-        <Typography p={1} variant={"h3"} textAlign='center' style={{ fontWeight: 'bold' }}>
+        <Typography p={1} variant={"h3"} textAlign='center' style={{ fontWeight: 'bold', color: '#fff' }}>
           Assessment Result
         </Typography>
         {
@@ -228,7 +227,7 @@ function Result() {
                   if (arrStrand1 === "") {
                     navigate('/assessment')
                   } else {
-                    navigate('/academic-strands')
+                    navigate('/home')
                   }
                 }}>{text}</Button>
               </Box>

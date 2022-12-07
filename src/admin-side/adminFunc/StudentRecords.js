@@ -68,8 +68,7 @@ const columns = [
 
 const style = {
   root: {
-    background: (theme) =>
-      `radial-gradient(circle, ${theme.palette.primary.light}, ${theme.palette.primary.dark})`,
+    background: `linear-gradient(to bottom right,#0052A2, #00498D)`,
     width: "100%",
     height: {
       xs: '100%',
@@ -161,7 +160,7 @@ function StudentRecords() {
             </Box>
             <Typography
               sx={{
-                textAlign: 'center', mb: 3, fontWeight: 'bold', letterSpacing: 1, fontSize: 35
+                textAlign: 'center', mb: 3, fontWeight: 'bold', letterSpacing: 1, fontSize: 35, color: '#fff'
               }}
             >Student records</Typography>
             <Box component={Grid} container alignItems="center" justifyContent='center' >
